@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:todo_with_provider/network/connectivity.dart';
+import 'package:todo_with_provider/Provider/connectivity.dart';
 import 'package:todo_with_provider/utils/routes/routes.dart';
 import 'package:todo_with_provider/utils/routes/routes_name.dart';
 

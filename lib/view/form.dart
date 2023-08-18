@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo_with_provider/network/Helper/Apis.dart';
 import 'package:todo_with_provider/resources/Components/round_button.dart';
 import 'package:todo_with_provider/utils/utils.dart';
 
@@ -10,7 +11,6 @@ class FormPage extends StatefulWidget {
 }
 
 class _FormPageState extends State<FormPage> {
-
   FocusNode titleFocusNode = FocusNode();
   FocusNode descriptionFocusNode = FocusNode();
 
@@ -21,6 +21,7 @@ class _FormPageState extends State<FormPage> {
     titleFocusNode.dispose();
     descriptionFocusNode.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,7 +43,7 @@ class _FormPageState extends State<FormPage> {
                     OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
                 hintText: "Title",
               ),
-              onFieldSubmitted: (value){
+              onFieldSubmitted: (value) {
                 Utils.fieldFocusChange(
                     context, titleFocusNode, descriptionFocusNode);
               },
@@ -61,10 +62,20 @@ class _FormPageState extends State<FormPage> {
             const SizedBox(height: 30),
             Center(
                 child: RoundButton(
-                    title: "Add todo",
-                    onPress: () {}
-                )
-            )
+              title: "Add todo",
+              onPress: () async {
+                final isSuccess =
+                    await ApiService.submitData("Title", "Description");
+                if (isSuccess) {
+                  // ignore: use_build_context_synchronously
+                  SnackBarService.showSuccessMessage(
+                      context, 'Creation Success');
+                } else {
+                  // ignore: use_build_context_synchronously
+                  SnackBarService.showErrorMessage(context, 'Creation failed');
+                }
+              },
+            ))
           ],
         ),
       ),
