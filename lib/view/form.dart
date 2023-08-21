@@ -1,22 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:todo_with_provider/network/Helper/Apis.dart';
 import 'package:todo_with_provider/resources/Components/round_button.dart';
+import 'package:todo_with_provider/utils/snakbar_service.dart';
 import 'package:todo_with_provider/utils/utils.dart';
 
 class FormPage extends StatefulWidget {
-  const FormPage({super.key});
+  const FormPage({super.key, required this.title, required this.buttonTitle});
+
+  final String title;
+  final String buttonTitle;
 
   @override
-  State<FormPage> createState() => _FormPageState();
+  State<FormPage> createState() => _FormPageState(title);
 }
 
 class _FormPageState extends State<FormPage> {
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
   FocusNode titleFocusNode = FocusNode();
   FocusNode descriptionFocusNode = FocusNode();
 
+  _FormPageState(String title);
+
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     titleFocusNode.dispose();
     descriptionFocusNode.dispose();
@@ -26,7 +33,7 @@ class _FormPageState extends State<FormPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("ADD todo"),
+        title: Text(widget.title),
         centerTitle: true,
         backgroundColor: const Color.fromARGB(255, 231, 237, 222),
       ),
@@ -37,6 +44,7 @@ class _FormPageState extends State<FormPage> {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             TextFormField(
+              controller: _titleController,
               focusNode: FocusNode(),
               decoration: InputDecoration(
                 border:
@@ -52,6 +60,7 @@ class _FormPageState extends State<FormPage> {
               height: 10,
             ),
             TextFormField(
+              controller: _descriptionController,
               maxLines: 5,
               decoration: InputDecoration(
                 border:
@@ -62,10 +71,10 @@ class _FormPageState extends State<FormPage> {
             const SizedBox(height: 30),
             Center(
                 child: RoundButton(
-              title: "Add todo",
+              title: widget.buttonTitle,
               onPress: () async {
-                final isSuccess =
-                    await ApiService.submitData("Title", "Description");
+                final isSuccess = await ApiService.submitData(
+                    _titleController.text, _descriptionController.text);
                 if (isSuccess) {
                   // ignore: use_build_context_synchronously
                   SnackBarService.showSuccessMessage(

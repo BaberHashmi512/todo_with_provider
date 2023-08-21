@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_with_provider/Provider/connectivity.dart';
-import 'package:todo_with_provider/resources/Components/appbar.dart';
 import 'package:todo_with_provider/utils/routes/routes_name.dart';
 import 'package:todo_with_provider/view/todo_list_screen.dart';
 
@@ -33,9 +32,7 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Color.fromARGB(255, 231, 237, 222),
         elevation: 0,
       ),
-      body: Center(
-          child: TodoListScreen()
-      ),
+      body: TodoListScreen(),
       floatingActionButton: FloatingActionButton.extended(
         label: const Text("ADD Todo"),
         icon: const Icon(Icons.add),

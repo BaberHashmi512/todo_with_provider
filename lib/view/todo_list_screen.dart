@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:todo_with_provider/utils/routes/routes_name.dart';
+
 class TodoListScreen extends StatefulWidget {
   @override
   _TodoListScreenState createState() => _TodoListScreenState();
@@ -18,7 +20,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
   }
 
   Future<void> fetchData() async {
-    final url = "https://api.nstack.in/v1/todos?page=1&limit=10";
+    const url = "https://api.nstack.in/v1/todos?page=1&limit=20";
     final uri = Uri.parse(url);
     final response = await http.get(uri);
     if (response.statusCode == 200) {
@@ -65,7 +67,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
                 trailing: PopupMenuButton(
                   onSelected: (value) async {
                     if (value == 'edit') {
-                      // Edit logic
+                      Navigator.pushNamed(context, RoutesName.editForm);
                     } else if (value == 'delete') {
                       // Delete logic
                     }
