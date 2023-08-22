@@ -1,15 +1,19 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
-
+import 'package:todo_with_provider/network/Helper/apis.dart';
 import 'package:todo_with_provider/utils/routes/routes_name.dart';
+import 'package:todo_with_provider/utils/snakbar_service.dart';
 
 class TodoListScreen extends StatefulWidget {
+  const TodoListScreen({super.key});
+
   @override
   _TodoListScreenState createState() => _TodoListScreenState();
 }
 
 class _TodoListScreenState extends State<TodoListScreen> {
+  ApiService apiService = ApiService();
   late List<Map<String, dynamic>> items = [];
   bool _isLoading = true;
 
@@ -48,8 +52,8 @@ class _TodoListScreenState extends State<TodoListScreen> {
         child: ListView.builder(
           itemCount: items.length,
           itemBuilder: (context, index) {
+            print("Baber");
             final item = items[index];
-            final id = item['_id'];
             return Card(
               margin: const EdgeInsets.all(8),
               child: ListTile(
@@ -57,19 +61,38 @@ class _TodoListScreenState extends State<TodoListScreen> {
                 title: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 5),
                   child: Text(
-                    items[index]['title'],
+                    item['title'],
                     style: const TextStyle(
                       fontSize: 20,
                     ),
                   ),
                 ),
-                subtitle: Text(items[index]['description']),
+                subtitle: Text(item['description']),
                 trailing: PopupMenuButton(
                   onSelected: (value) async {
                     if (value == 'edit') {
-                      Navigator.pushNamed(context, RoutesName.editForm);
+                      Navigator.pushNamed(
+                        context,
+                        RoutesName.editForm,
+                        arguments: {
+                          'title': item['title'],
+                          'description': item['description'],
+                          'itemId': item['_id']
+                        },
+                      );
                     } else if (value == 'delete') {
                       // Delete logic
+                      final isSuccess =
+                          await apiService.deleteById(item["_id"]);
+                      if (isSuccess) {
+                        // ignore: use_build_context_synchronously
+                        SnackBarService.showSuccessMessage(
+                            context, 'Deletion Success');
+                      } else {
+                        // ignore: use_build_context_synchronously
+                        SnackBarService.showErrorMessage(
+                            context, 'Deletion failed');
+                      }
                     }
                   },
                   itemBuilder: (context) {

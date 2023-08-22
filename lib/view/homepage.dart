@@ -27,12 +27,12 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Todo List"),
+        title: const Text("Todo List"),
         centerTitle: true,
-        backgroundColor: Color.fromARGB(255, 231, 237, 222),
+        backgroundColor: const Color.fromARGB(255, 231, 237, 222),
         elevation: 0,
       ),
-      body: TodoListScreen(),
+      body: const TodoListScreen(),
       floatingActionButton: FloatingActionButton.extended(
         label: const Text("ADD Todo"),
         icon: const Icon(Icons.add),

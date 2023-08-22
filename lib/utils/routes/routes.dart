@@ -11,16 +11,14 @@ class Routes {
             builder: (BuildContext context) => const HomePage());
       case RoutesName.form:
         return MaterialPageRoute(
-            builder: (BuildContext context) => const FormPage(
+            builder: (BuildContext context) =>  const FormPage(
                   title: "ADD Todo",
                   buttonTitle: 'Add Todo',
                 ));
       case RoutesName.editForm:
         return MaterialPageRoute(
             builder: (BuildContext context) => const FormPage(
-                  title: "Edit Todo",
-                  buttonTitle: 'Edit Todo',
-                ));
+                title: "Edit Todo", buttonTitle: 'Edit Todo', itemId: 'itemId'));
       default:
         return MaterialPageRoute(builder: (_) {
           return const Scaffold(

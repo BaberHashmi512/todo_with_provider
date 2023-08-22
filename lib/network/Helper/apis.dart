@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  static Future<bool> submitData(String title, String description) async {
+  Future<bool> submitData(String title, String description) async {
     try {
       final body = {
         "title": title,
@@ -27,13 +27,14 @@ class ApiService {
       return false;
     }
   }
+
   Future<bool> updateData(
-      String id, String title, String description, bool isCompleted) async {
+      String id, String title, String description) async {
     try {
       final body = {
         "title": title,
         "description": description,
-        "is_completed": isCompleted
+        "is_completed": false
       };
 
       final url = "https://api.nstack.in/v1/todos/$id";
@@ -47,6 +48,23 @@ class ApiService {
       if (response.statusCode == 200) {
         return true;
       } else {
+        print('Hello ki hal hai ${response.body}');
+        return false;
+      }
+    } catch (e) {
+      print('baber ${e}');
+      return false;
+    }
+  }
+
+  Future<bool> deleteById(String id) async {
+    try {
+      final url = "https://api.nstack.in/v1/todos/$id";
+      final uri = Uri.parse(url);
+      final response = await http.delete(uri);
+      if (response.statusCode == 200) {
+        return true;
+      } else {
         print(response.body);
         return false;
       }
@@ -55,6 +73,4 @@ class ApiService {
       return false;
     }
   }
-
 }
-
