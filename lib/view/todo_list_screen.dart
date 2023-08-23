@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:todo_with_provider/network/Helper/apis.dart';
 import 'package:todo_with_provider/utils/routes/routes_name.dart';
 import 'package:todo_with_provider/utils/snakbar_service.dart';
+import 'package:todo_with_provider/utils/todo.dart';
 
 class TodoListScreen extends StatefulWidget {
   const TodoListScreen({super.key});
@@ -74,14 +75,9 @@ class _TodoListScreenState extends State<TodoListScreen> {
                       Navigator.pushNamed(
                         context,
                         RoutesName.editForm,
-                        arguments: {
-                          'title': item['title'],
-                          'description': item['description'],
-                          'itemId': item['_id']
-                        },
+                        arguments: TodoArguments(item['_id'], item['title'], item['description']),
                       );
                     } else if (value == 'delete') {
-                      // Delete logic
                       final isSuccess =
                           await apiService.deleteById(item["_id"]);
                       if (isSuccess) {

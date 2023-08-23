@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:todo_with_provider/network/Helper/apis.dart';
 import 'package:todo_with_provider/resources/Components/round_button.dart';
 import 'package:todo_with_provider/utils/snakbar_service.dart';
+import 'package:todo_with_provider/utils/todo.dart';
 import 'package:todo_with_provider/utils/utils.dart';
 
 class FormPage extends StatefulWidget {
@@ -10,17 +11,11 @@ class FormPage extends StatefulWidget {
     required this.title,
     required this.buttonTitle,
     this.todo,
-    this.initialTitle,
-    this.initialDescription,
-    this.itemId,
   });
 
   final String title;
   final String buttonTitle;
-  final Map? todo;
-  final String? initialTitle;
-  final String? initialDescription;
-  final String? itemId;
+  final TodoArguments? todo;
 
   @override
   // ignore: no_logic_in_create_state
@@ -34,20 +29,8 @@ class _FormPageState extends State<FormPage> {
   FocusNode descriptionFocusNode = FocusNode();
   ApiService apiService = ApiService();
 
-  bool isEdit = false;
 
-  @override
-  void initState() {
-    super.initState();
-    final todo = widget.todo;
-    if (todo != null) {
-      _titleController.text = todo['title'];
-      _descriptionController.text = todo['description'];
-    } else {
-      _titleController.text = widget.initialTitle ?? '';
-      _descriptionController.text = widget.initialDescription ?? '';
-    }
-  }
+  bool isEdit = false;
 
   @override
   void dispose() {
@@ -58,6 +41,17 @@ class _FormPageState extends State<FormPage> {
 
   @override
   Widget build(BuildContext context) {
+    print('Nello ${widget.todo}');
+    String itemId = "";
+    if (widget.todo != null) {
+      final todo = widget.todo;
+      final title = todo!.title;
+      final description = todo!.description;
+      final id = todo!.id;
+      itemId = id;
+      _titleController.text = title;
+      _descriptionController.text = description;
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -97,40 +91,41 @@ class _FormPageState extends State<FormPage> {
             ),
             const SizedBox(height: 30),
             Center(
-                child: RoundButton(
-              title: widget.buttonTitle,
-              onPress: () async {
-                if (widget.buttonTitle == 'Add Todo') {
-                  final isSuccess = await apiService.submitData(
-                    _titleController.text,
-                    _descriptionController.text,
-                  );
-                  if (isSuccess) {
-                    // ignore: use_build_context_synchronously
-                    SnackBarService.showSuccessMessage(
-                        context, 'Creation Success');
-                  } else {
-                    // ignore: use_build_context_synchronously
-                    SnackBarService.showErrorMessage(
-                        context, 'Creation failed');
+              child: RoundButton(
+                title: widget.buttonTitle,
+                onPress: () async {
+                  if (widget.buttonTitle == 'Add Todo') {
+                    final isSuccess = await apiService.submitData(
+                      _titleController.text,
+                      _descriptionController.text,
+                    );
+                    if (isSuccess) {
+                      // ignore: use_build_context_synchronously
+                      SnackBarService.showSuccessMessage(
+                          context, 'Creation Success');
+                    } else {
+                      // ignore: use_build_context_synchronously
+                      SnackBarService.showErrorMessage(
+                          context, 'Creation failed');
+                    }
+                  } else if (widget.buttonTitle == 'Edit Todo') {
+                    final isSuccess = await apiService.updateData(
+                      itemId,
+                      _titleController.text,
+                      _descriptionController.text,
+                    );
+                    if (isSuccess) {
+                      // ignore: use_build_context_synchronously
+                      SnackBarService.showSuccessMessage(
+                          context, 'Edit Success');
+                    } else {
+                      // ignore: use_build_context_synchronously
+                      SnackBarService.showErrorMessage(context, 'Edit failed');
+                    }
                   }
-                } else if (widget.buttonTitle == 'Edit Todo') {
-                  print("Office");
-                  final isSuccess = await apiService.updateData(
-                    _titleController.text,
-                    _descriptionController.text,
-                    widget.itemId!,
-                  );
-                  if (isSuccess) {
-                    // ignore: use_build_context_synchronously
-                    SnackBarService.showSuccessMessage(context, 'Edit Success');
-                  } else {
-                    // ignore: use_build_context_synchronously
-                    SnackBarService.showErrorMessage(context, 'Edit failed');
-                  }
-                }
-              },
-            ))
+                },
+              ),
+            ),
           ],
         ),
       ),
