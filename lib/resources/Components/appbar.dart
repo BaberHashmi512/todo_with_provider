@@ -12,9 +12,9 @@ class _FrontBarState extends State<FrontBar> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Todo List"),
+        title: const Text("Todo List"),
         centerTitle: true,
-        backgroundColor: Color.fromARGB(255, 231, 237, 222),
+        backgroundColor: const Color.fromARGB(255, 231, 237, 222),
         elevation: 0,
       ),
     );

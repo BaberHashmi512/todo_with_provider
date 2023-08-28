@@ -13,14 +13,14 @@ class Routes {
         );
       case RoutesName.form:
         return MaterialPageRoute(
-          builder: (BuildContext context) =>  const FormPage(
+          builder: (BuildContext context) => const FormPage(
             title: "ADD Todo",
             buttonTitle: 'Add Todo',
           ),
         );
       case RoutesName.editForm:
         return MaterialPageRoute(
-          builder: (BuildContext context) =>  FormPage(
+          builder: (BuildContext context) => FormPage(
             title: "Edit Todo",
             buttonTitle: 'Edit Todo',
             todo: settings.arguments as TodoArguments,

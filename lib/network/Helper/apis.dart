@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 
 class ApiService {
@@ -28,8 +29,7 @@ class ApiService {
     }
   }
 
-  Future<bool> updateData(
-      String id, String title, String description) async {
+  Future<bool> updateData(String id, String title, String description) async {
     try {
       final body = {
         "title": title,

@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:todo_with_provider/network/Helper/apis.dart';
@@ -72,15 +73,20 @@ class _TodoListScreenState extends State<TodoListScreen> {
                 trailing: PopupMenuButton(
                   onSelected: (value) async {
                     if (value == 'edit') {
-                      Navigator.pushNamed(
+                      Navigator.pushNamedAndRemoveUntil(
                         context,
                         RoutesName.editForm,
-                        arguments: TodoArguments(item['_id'], item['title'], item['description']),
+                        (route) => true,
+                        arguments: TodoArguments(
+                            item['_id'], item['title'], item['description']),
                       );
                     } else if (value == 'delete') {
                       final isSuccess =
                           await apiService.deleteById(item["_id"]);
                       if (isSuccess) {
+                        setState(() {
+                          items.remove(item);
+                        });
                         // ignore: use_build_context_synchronously
                         SnackBarService.showSuccessMessage(
                             context, 'Deletion Success');
